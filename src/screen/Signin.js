@@ -1,126 +1,69 @@
 import {
-  Text,
   SafeAreaView,
   Image,
-  View,
-  TextInput,
+  Text,
   StyleSheet,
+  View,
   Pressable,
 } from "react-native";
-
 import React, { useState } from "react";
-import Input from "../components/Input";
 import Button from "../components/Button";
+import Input from "../components/Input";
+import { StatusBar } from "expo-status-bar";
 import { signInWithEmailAndPassword } from "firebase/auth";
-
-
+import { auth } from "../../App";
 
 export default function Signin({ navigation }) {
- 
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [loading,setLoading] = useState(false);
-  const[error,setError] = useState(null);
 
-  const signin = () =>{
-    signInWithEmailAndPassword(auth, email, password).then((res)=>{
-      console.log("Successfully loged in -->", res)
-    })
-  }
+  const signin = () => {
+    signInWithEmailAndPassword(auth, email, password).then((res) => {
+      console.log("Successfully loged in -->", res);
+    });
+  };
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Image
-        source={require("../../assets/images.png")}
-        style={{ alignSelf: "center" }}
+        source={require("../../assets/login.png")}
+        style={{ width: "100%", height: 300 }}
       />
-
-      <Text style={{ fontSize: 18, textAlign: "center", fontWeight: "bold" }}>
-        Never forget your notes
-      </Text>
-
-      <View style={{ paddingHorizontal: 16, paddingVertical: 25 }}>   
-      
-       <Input placeholder="Email"
-       autoCapitalize={"none"}
-
-       />
-      
+      <Text style={styles.noteText}>Never forget your notes</Text>
+      <View style={styles.Inputcontainer}>
         <Input
-      
-          placeholder="PassWord"
-      
-         secureTextEntry // for hide the pass
-      
-          />   
-          {error && <Text style={{color:"red",marginTop:10}}>{error}</Text>}
-
+          placeholder="Email Address"
+          onChangeText={(text) => setEmail(text)}
+          autoCapitalize="none"
+        />
+        <Input
+          placeholder="Password"
+          onChangeText={(text) => setPassword(text)}
+          secureTextEntry
+        />
       </View>
 
-        {/* link to signUp*/}
-        <View style={styles.link} >
-        <Button title="Signin" onPress={signin} customStyles={{ alignSelf: "center", marginBottom: 20 }} ></Button>
-        <Pressable style={{flexDirection: 'row'}} onPress={()=> {navigation.navigate("Signup")}}>
+      {/* link to signUp*/}
+      <View style={styles.link}>
+        <Button
+          title="Signin"
+          onPress={signin}
+          customStyles={{ alignSelf: "center", marginBottom: 20 }}
+        ></Button>
+        <Pressable
+          style={{ flexDirection: "row" }}
+          onPress={() => {
+            navigation.navigate("Signup");
+          }}
+        >
           <Text>Don't have an account? </Text>
           <Text style={{ color: "green" }}>Signup</Text>
         </Pressable>
       </View>
-      <StatusBar style={{color: 'black'}} />
-{/* 
-      <View
-        style={{
-          
-          flex: 1,
-          
-          justifyContent: "flex-end",
-          
-          alignItems: "center",
-          
-          marginBottom: 15,
-        }}
-      >
-       
-        <Button
-       
-          title={"login"}
-       
-          customStyles={{
-       
-            alignSelf: "center",
-       
-            marginBottom: 60,
-       
-          }}
-       
-        />
-
-
-      
-        <Pressable
-      
-          onPress={() => {
-      
-            navigation.navigate("Signup");
-      
-          }}
-      
-        >
-      
-          <Text>
-      
-            Don't Have An Acoount ?{" "}
-      
-            <Text style={{ color: "green", fontWeight: "bold" }}>Sign Up</Text>
-      
-          </Text>
-      
-        </Pressable>
-     
-      </View> */}
-    
+      <StatusBar style={{ color: "black" }} />
     </SafeAreaView>
   );
 }
-
 
 const styles = StyleSheet.create({
   noteText: {
@@ -136,8 +79,8 @@ const styles = StyleSheet.create({
   },
   link: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
     alignItems: "center",
     paddingBottom: 30,
-  }
+  },
 });

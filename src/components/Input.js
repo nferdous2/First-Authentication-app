@@ -7,6 +7,7 @@ export default function Input({
   onChangeText,
    value,
    autoCapitalize,
+   multiline,
 
 }) {
   return (
@@ -18,6 +19,7 @@ export default function Input({
       autoCorrect={false}
       value={value}
       autoCapitalize={autoCapitalize}
+      multiline={multiline}
     />
   );
 }

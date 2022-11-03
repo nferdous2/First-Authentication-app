@@ -1,5 +1,6 @@
 import {
   SafeAreaView,
+  Image,
   Text,
   StyleSheet,
   View,
@@ -15,7 +16,6 @@ import {
   query,
   where,
 } from "firebase/firestore";
-
 import React, { useState } from "react";
 import Button from "../components/Button";
 import Input from "../components/Input";
@@ -24,6 +24,7 @@ import { auth, db } from "../../App";
 import { showMessage } from "react-native-flash-message";
 
 export default function Signup({ navigation }) {
+
   const [loading, setLoading] = useState(true);
   const genderOptions = ["Male", "Female"];
   const [gender, setGender] = useState(null);
@@ -31,7 +32,7 @@ export default function Signup({ navigation }) {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
-
+  
   const signUp = async () => {
     setLoading(true);
     try {
@@ -43,98 +44,160 @@ export default function Signup({ navigation }) {
       );
       // add user profile to database
       await addDoc(collection(db, "users"), {
-        name:name,
-        email:email,
-        age:age,
-        gender:gender,
+        name: name,
+        email: email,
+        age: age,
+        gender: gender,
         uid: result.user.uid,
       });
-      
-      setLoading(false);  //find the user
- 
-    } 
-    catch (error) {
+      setLoading(false);
+    } catch (error) {
       console.log(error);
       showMessage({
-        message: "Error",
+        message: "Error!",
         type: "danger",
       });
       setLoading(false);
     }
   };
 
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
+     
       <View style={styles.Inputcontainer}>
-      
+     
         <Input
+     
           placeholder="Email Address"
+     
           onChangeText={(text) => setEmail(text)}
-          autoCapitalize={"none"}
+     
+          autoCapitalize="none"
+     
         />
-
+     
         <Input
+     
           placeholder="Password"
+     
           secureTextEntry
+     
           onChangeText={(text) => setPassword(text)}
+     
         />
+     
         <Input
+     
           placeholder="Full Name"
+     
           onChangeText={(text) => setName(text)}
-          autoCapitalize={"words"}
+     
+          autoCapitalize="words"
+     
         />
+     
         <Input placeholder="Age" onChangeText={(text) => setAge(text)} />
+     
         <View>
+     
           <Text style={{ marginVertical: 20 }}>Select gender</Text>
+     
         </View>
+     
         {genderOptions.map((option) => {
+     
           const selected = option === gender;
+     
           return (
+     
             <Pressable
+     
               onPress={() => {
+     
                 setGender(option);
+     
               }}
+     
               style={styles.radioContainer}
+     
               key={option}
+     
             >
+     
               <View
+     
                 style={[
+     
                   styles.outerCircle,
+     
                   selected && styles.selectedOuterCirlce,
+     
                 ]}
+     
               >
+     
                 <View
+     
                   style={[
+     
                     styles.innerCircle,
+     
                     selected && styles.selectedInnerCirlce,
+     
                   ]}
+     
                 />
+     
               </View>
+     
               <Text style={styles.radioText}>{option}</Text>
+     
             </Pressable>
+     
           );
+     
         })}
+     
       </View>
 
+
+     
       {/* link to SIGNIN*/}
+     
       <View style={styles.link}>
+     
         <Button
+     
           title="Signup"
+     
           customStyles={{ alignSelf: "center", marginBottom: 20 }}
+     
           onPress={signUp}
+     
         />
+     
         <Pressable
+     
           style={{ flexDirection: "row" }}
+     
           onPress={() => {
+     
             navigation.navigate("Signin");
+     
           }}
+     
         >
+     
           <Text>Already have an account? </Text>
+     
           <Text style={{ color: "green" }}>Signin</Text>
+     
         </Pressable>
+     
       </View>
+     
       <StatusBar style={{ color: "black" }} />
+      
     </SafeAreaView>
   );
 }
